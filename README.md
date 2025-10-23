@@ -1,231 +1,183 @@
-README - Preentrega: Proyecto Final - Backend III (Testing y Escalabilidad)
+# 🐶 Proyecto Mocking API – MongoDB + Express
 
-Proyecto: Generador de datos mocks para pruebas (usuarios y pets)
-Curso: Programación Backend III: Testing y Escalabilidad Backend - Carreras Intensivas
-Autor: (pon tu nombre aquí)
-Tecnologías: Node.js, Express, MongoDB (Mongoose), bcryptjs, @faker-js/faker
+Este proyecto es una API construida con **Node.js + Express + Mongoose**, que permite **generar datos ficticios (mocking)** de usuarios y mascotas, así como **insertarlos en MongoDB Atlas** para pruebas y desarrollo.
 
-1. Resumen del proyecto
+---
 
-Este repositorio contiene la implementación de un router /api/mocks con utilidades para generar datos mock (usuarios y mascotas). Permite:
+## 🚀 Tecnologías usadas
 
-Generar usuarios falsos con contraseña encriptada (coder123) y role aleatorio (user / admin) y pets: [].
+- **Node.js + Express** – Servidor web  
+- **MongoDB Atlas + Mongoose** – Base de datos  
+- **Faker.js** – Generación de datos falsos realistas  
+- **Dotenv** – Variables de entorno  
 
-Generar mascotas mock.
+---
 
-Insertar en la base de datos cantidades indicadas de usuarios y pets mediante POST /api/mocks/generateData.
+## ⚙️ Configuración
 
-Proveer endpoints para obtener los mocks sin persistirlos (útil para pruebas).
+### 1. Clonar el repositorio
 
-Este proyecto está pensado para pruebas, demos y pre-entregas. No debe dejarse expuesto en entornos de producción.
+```bash
+git clone <URL-del-repo>
+cd <carpeta-del-proyecto>
+```
 
-2. Estructura del repositorio (recomendada)
-/
-├─ src/
-│  ├─ models/
-│  │  ├─ user.model.js
-│  │  └─ pet.model.js
-│  ├─ routes/
-│  │  └─ mocks.router.js
-│  ├─ utils/
-│  │  └─ mocking.js
-│  └─ app.js
-├─ .env
-├─ .gitignore
-├─ package.json
-└─ README.md
+### 2. Instalar dependencias
 
-3. Requisitos previos
-
-Node.js v16+ instalado.
-
-MongoDB local (por ejemplo mongodb://localhost:27017/mi_proyecto_db) o una instancia en Mongo Atlas.
-
-Git (para subir a GitHub).
-
-4. Variables de entorno (.env)
-
-Crea un archivo .env en la raíz con al menos:
-
-PORT=3000
-MONGO_URI=mongodb://localhost:27017/mi_proyecto_db
-NODE_ENV=development
-
-
-Si usas Mongo Atlas reemplaza MONGO_URI por la URI correspondiente.
-
-5. Instalación
-
-Desde la raíz del proyecto:
-
+```bash
 npm install
+```
 
+### 3. Crear archivo `.env`
 
-(Si no tienes package.json, ejecutar npm init -y antes.)
+En la raíz del proyecto (misma carpeta donde está `src`), crea un archivo llamado `.env` con el siguiente contenido:
 
-Sugerencia de dependencias:
+```ini
+PORT=3000
+MONGO_URI=<tu-string-de-conexion-de-MongoDB-Atlas>
+```
 
-npm install express mongoose dotenv bcryptjs @faker-js/faker
-npm install --save-dev nodemon
+**Ejemplo:**
 
+```bash
+MONGO_URI=mongodb+srv://usuario:password@cluster0.mongodb.net/midb
+```
 
-Ejemplo de scripts en package.json:
+---
 
-"scripts": {
-  "start": "node src/app.js",
-  "dev": "nodemon src/app.js"
-}
+## ▶️ Ejecutar el servidor
 
-6. Endpoints importantes
+```bash
+npm start
+```
 
-Base del router: /api/mocks
+O si estás en desarrollo:
 
-GET /api/mocks/mockingusers
-
-Descripción: Genera usuarios mock (por defecto 50).
-
-Query opcional: ?amount=30 (cantidad deseada).
-
-Respuesta: { status: 'success', payload: [ { _id, first_name, last_name, email, password, role, pets }, ... ] }
-
-Nota: password viene hasheada y su valor en texto original es coder123.
-
-GET /api/mocks/mockingpets
-
-Descripción: Genera mascotas mock (por defecto 20).
-
-Query opcional: ?amount=15
-
-Respuesta: { status: 'success', payload: [ { _id, name, species, age }, ... ] }
-
-POST /api/mocks/generateData
-
-Descripción: Genera e inserta en la base de datos la cantidad de users y pets indicada.
-
-Body JSON: { "users": 10, "pets": 5 }
-
-Respuesta: { status: 'success', created: { users: 10, pets: 5 } }
-
-Verificación: usar tus endpoints GET /api/users y GET /api/pets para comprobar inserciones.
-
-7. Cómo ejecutar (local)
-
-Asegúrate de que MongoDB esté en marcha (local o Atlas).
-
-Configura .env.
-
-Ejecuta el servidor en modo desarrollo:
-
+```bash
 npm run dev
+```
 
+Verás en consola:
 
-Verifica en la consola Mongo conectado y Servidor escuchando en http://localhost:3000.
+```
+Conectado a MongoDB Atlas
+Servidor escuchando en http://localhost:3000
+```
 
-8. Ejemplos de uso (curl)
+---
 
-Generar 50 usuarios mock (sin insertar):
+## 🧪 Endpoints disponibles
 
-curl http://localhost:3000/api/mocks/mockingusers
+### ✅ Verificar conexión
+**GET →** `/api/test`  
+Prueba si la conexión con MongoDB está activa.
 
+**Respuesta ejemplo:**
+```json
+{ "ok": true, "mensaje": "Conexión a MongoDB exitosa 🚀" }
+```
 
-Generar 30 usuarios mock:
+---
 
-curl "http://localhost:3000/api/mocks/mockingusers?amount=30"
+### 🧍‍♂️ Usuarios
 
+| Método | Endpoint | Descripción |
+|--------|-----------|-------------|
+| GET | `/api/users` | Lista todos los usuarios guardados en la base de datos |
+| GET | `/api/users/:id` | Obtiene un usuario por su ID |
 
-Insertar 10 usuarios y 5 pets en la base de datos:
+---
 
-curl -X POST http://localhost:3000/api/mocks/generateData \
-  -H "Content-Type: application/json" \
-  -d '{"users": 10, "pets": 5}'
+### 🐾 Mascotas
 
+| Método | Endpoint | Descripción |
+|--------|-----------|-------------|
+| GET | `/api/pets` | Lista todas las mascotas guardadas |
+| GET | `/api/pets/:id` | Obtiene una mascota por ID |
 
-Consultar tus usuarios insertados (si tu proyecto tiene GET /api/users):
+---
 
-curl http://localhost:3000/api/users
+### 🧩 Mocking (datos falsos)
 
-9. Notas técnicas y recomendaciones
+#### 1️⃣ Generar usuarios falsos (sin guardar)
+**GET →** `/api/mocks/mockingusers`  
+Opcional: `?amount=100` para definir cantidad.
 
-Contraseña: la contraseña usada en los mocks es siempre coder123 — en la DB se guarda en forma hasheada con bcryptjs.
+#### 2️⃣ Generar mascotas falsas (sin guardar)
+**GET →** `/api/mocks/mockingpets`  
+Opcional: `?amount=20`
 
-Formato Mongo: los objetos generados incluyen _id con ObjectId para que tengan el formato de una respuesta de Mongo.
+#### 3️⃣ Generar e insertar datos en MongoDB
+**POST →** `/api/mocks/generateData`
 
-Emails únicos: si tu esquema User marca email como unique, puede haber colisiones raras. Si obtienes errores al insertar, puedes:
+**Body (JSON):**
+```json
+{
+  "users": 10,
+  "pets": 5
+}
+```
 
-Generar emails garantizados únicos añadiendo el índice del bucle al nombre.
+**Respuesta ejemplo:**
+```json
+{
+  "status": "success",
+  "created": {
+    "users": 10,
+    "pets": 5
+  }
+}
+```
 
-Usar insertMany(users, { ordered: false }) para que continúe ante errores de duplicado.
+---
 
-Producción: estos endpoints son para desarrollo — añade protección (por ejemplo if (process.env.NODE_ENV === 'production') desactiva o protege el router).
+## 📬 Pruebas recomendadas en Postman
 
-Performance: generateUsers hashea la misma contraseña una sola vez para ahorrar tiempo. Si necesitas salts distintos por usuario, hashea dentro del loop (más lento).
+**Verificar conexión:**
+```
+GET http://localhost:3000/api/test
+```
 
-Validaciones del modelo: adapta los objetos generados al esquema real de tu proyecto si tienes campos requeridos adicionales.
+**Generar e insertar datos:**
+```
+POST http://localhost:3000/api/mocks/generateData
+```
 
-10. Criterios de evaluación (mapeo rápido)
+**Body → JSON:**
+```json
+{
+  "users": 5,
+  "pets": 5
+}
+```
 
-Router mocks.router.js
+**Listar usuarios guardados:**
+```
+GET http://localhost:3000/api/users
+```
 
-Creado y montado en /api/mocks.
+**Listar mascotas guardadas:**
+```
+GET http://localhost:3000/api/pets
+```
 
-GET /mockingpets migrado correctamente.
+**Generar mocks sin guardar (solo vista):**
+```
+GET http://localhost:3000/api/mocks/mockingusers
+GET http://localhost:3000/api/mocks/mockingpets
+```
 
-Módulo Mocking (generateUsers)
+---
 
-Genera la cantidad indicada.
+## 🧠 Notas
 
-Password encriptada.
+- Los datos generados con `/mockingusers` y `/mockingpets` **no se guardan en la base de datos**.  
+- Para insertar en MongoDB, usa el endpoint `/api/mocks/generateData`.  
+- Puedes cambiar la cantidad de datos usando `?amount=` o pasando valores en el body.  
 
-role alterna entre user y admin.
+---
 
-pets como array vacío.
+## 📘 Autor
 
-Formato similar a petición Mongo (_id, timestamps opcional).
-
-Endpoint GET /mockingusers
-
-Utiliza el módulo mock y devuelve usuarios correctamente.
-
-Endpoint POST /generateData
-
-Inserta en DB la cantidad solicitada de users y pets.
-
-Verificable con GET /api/users y GET /api/pets.
-
-11. Problemas comunes y soluciones rápidas
-
-Error de conexión a Mongo: revisa MONGO_URI y que Mongo esté corriendo.
-
-InsertMany falla por unique index: usar ordered:false o ajustar generación de emails.
-
-Dependencias faltantes: npm install en la raíz del proyecto.
-
-Endpoint no responde: revisar que app.use('/api/mocks', mocksRouter) esté correctamente importado y que el servidor haya arrancado sin errores.
-
-12. Buenas prácticas antes de entregar
-
-Añade node_modules/ y .env a .gitignore.
-
-Incluye instrucciones claras en el README (este).
-
-Muestra comandos para probar (curl/Postman).
-
-Explica en el README cómo desactivar estos endpoints en producción.
-
-Comprime o instala todo localmente y prueba los endpoints antes de subir.
-
-13. Ejemplo de README mínimo para entrega (lista de verificación)
-
- Código del router src/routes/mocks.router.js
-
- Módulo src/utils/mocking.js
-
- Modelos src/models/user.model.js, src/models/pet.model.js (o reusar los tuyos)
-
- src/app.js con conexión a Mongo y mounting del router
-
- .env.example con variables
-
- README.md (este archivo)
-
- Repo subido a GitHub sin node_modules# backiiipreeni
+**Mateo Diaz**  
+Proyecto educativo para práctica con **Express + MongoDB + Faker.js**
