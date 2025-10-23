@@ -8,15 +8,11 @@ async function hashPassword(plain = 'coder123') {
   return await bcrypt.hash(plain, saltRounds);
 }
 
-/**
- * Genera un array de "n" usuarios con formato tipo Mongo.
- * Cada usuario tiene _id (ObjectId), first_name, last_name, email, password (hasheada), role, pets: []
- */
 async function generateUsers(n = 50) {
   const hashed = await hashPassword('coder123');
   const users = [];
   for (let i = 0; i < n; i++) {
-    const role = Math.random() < 0.15 ? 'admin' : 'user'; // ~15% admin (o cambialo)
+    const role = Math.random() < 0.15 ? 'admin' : 'user';
     users.push({
       _id: new mongoose.Types.ObjectId(),
       first_name: faker.person.firstName(),
@@ -30,15 +26,12 @@ async function generateUsers(n = 50) {
   return users;
 }
 
-/**
- * Genera n mascotas sencillas.
- */
 function generatePets(n = 20) {
   const pets = [];
   for (let i = 0; i < n; i++) {
     pets.push({
       _id: new mongoose.Types.ObjectId(),
-      name: faker.animal.dog(), // devuelve un nombre de animal; si quieres nombre humano use faker.person.firstName()
+      name: faker.animal.dog(),
       species: faker.animal.type ? faker.animal.type() : faker.animal.dog(),
       age: faker.number.int({ min: 1, max: 15 })
     });

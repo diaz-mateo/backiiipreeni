@@ -2,10 +2,8 @@ const express = require('express');
 const User = require('../models/user.model');
 const router = express.Router();
 
-// GET /api/users  -> listar todos (con paginado simple opcional)
 router.get('/', async (req, res) => {
   try {
-    // opcional: ?limit=50&skip=0
     const limit = parseInt(req.query.limit) || 100;
     const skip = parseInt(req.query.skip) || 0;
     const users = await User.find().skip(skip).limit(limit).lean();
@@ -15,7 +13,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/users/:id -> obtener por id
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).lean();

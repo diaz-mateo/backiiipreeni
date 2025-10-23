@@ -2,7 +2,6 @@ const express = require('express');
 const Pet = require('../models/pet.model');
 const router = express.Router();
 
-// GET /api/pets  -> listar todos
 router.get('/', async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 100;
@@ -14,7 +13,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/pets/:id -> obtener por id
 router.get('/:id', async (req, res) => {
   try {
     const pet = await Pet.findById(req.params.id).lean();
